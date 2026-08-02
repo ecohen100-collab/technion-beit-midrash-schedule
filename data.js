@@ -15,7 +15,8 @@ const DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", 
 const CONTACTS = {
   "וחי בהם": { contact: "גיל טולדנו" },
   "מדרשה לבנות": { contact: "רינת" },
-  "אמונה ומעשה": { contact: "איתן", phone: "058-5858432" }
+  "אמונה ומעשה": { contact: "איתן", phone: "058-5858432" },
+  "Lunch and Learn": { contact: "טובה לוין", phone: "052-2298735" }
 };
 
 const SCHEDULE = [
@@ -30,11 +31,17 @@ const SCHEDULE = [
   { time: "20:00", subject: "מדרשה לבנות - שיעור עם אפרת", teacher: "אפרת", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 60 },
   { time: "21:00", subject: "מדרשה לבנות - שיעור עם מו\"ר", teacher: "מו\"ר הרב אלעד דוקוב", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 60 },
   { time: "20:00", subject: "חברותא בצרפתית", teacher: "", category: "chevruta", contactKey: "", days: ["שני"], duration: 120, lang: "צרפתית" },
-  { time: "20:00", subject: "JLC", teacher: "הרב אבן לוין", category: "rabanim", contactKey: "", days: ["שני"], duration: 120, lang: "אנגלית" },
+  { time: "20:00", subject: "JLC", teacher: "הרב אבן לוין", category: "rabanim", contactKey: "", days: ["שני"], duration: 120, lang: "אנגלית", note: "לוודא מול הרב אבן לוין - אולי כפילות עם משמר" },
+
+  { time: "19:30", subject: "תוכנית סמיכת חבר", teacher: "הרב אבן לוין", category: "rabanim", contactKey: "", days: ["ראשון"], duration: 60, lang: "אנגלית", note: "לימוד עמוק בענייני הלכה. השעה תלויה בזמני תפילה" },
+  { time: "19:00", subject: "משמר", teacher: "הרב אבן לוין", category: "rabanim", contactKey: "", days: ["שני"], duration: 60, lang: "אנגלית", note: "לימוד בחבורות קטנות" },
 
   { time: "18:00", subject: "חברותא", teacher: "", category: "chevruta", contactKey: "", days: ["שלישי"], duration: 240 },
 
+  { time: "13:00", subject: "Lunch and Learn", teacher: "טובה לוין", category: "groups", contactKey: "Lunch and Learn", days: ["רביעי"], duration: 60, lang: "אנגלית" },
   { time: "20:30", subject: "וחי בהם - הלכה בעיון", teacher: "הרב עדיאל כהן", category: "groups", contactKey: "וחי בהם", days: ["רביעי"], duration: 60 },
+
+  { time: "8:30", subject: "שיעור בגמרא", teacher: "הרב אבן לוין", category: "rabanim", contactKey: "", days: ["חמישי"], duration: 60, lang: "אנגלית", note: "השעה משוערת" },
 
   { time: "19:00", subject: "דרשת שבת", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["שישי"], duration: 20, timeLabel: "בין קבלת שבת לערבית" },
 
