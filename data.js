@@ -31,7 +31,6 @@ const SCHEDULE = [
   { time: "20:00", subject: "מדרשה לבנות - שיעור עם אפרת", teacher: "אפרת", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 60 },
   { time: "21:00", subject: "מדרשה לבנות - שיעור עם מו\"ר", teacher: "מו\"ר הרב אלעד דוקוב", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 60 },
   { time: "20:00", subject: "חברותא בצרפתית", teacher: "", category: "chevruta", contactKey: "", days: ["שני"], duration: 120, lang: "צרפתית" },
-  { time: "20:00", subject: "JLC", teacher: "הרב אבן לוין", category: "rabanim", contactKey: "", days: ["שני"], duration: 120, lang: "אנגלית", note: "לוודא מול הרב אבן לוין - אולי כפילות עם משמר" },
 
   { time: "19:30", subject: "תוכנית סמיכת חבר", teacher: "הרב אבן לוין", category: "rabanim", contactKey: "", days: ["ראשון"], duration: 60, lang: "אנגלית", note: "לימוד עמוק בענייני הלכה. השעה תלויה בזמני תפילה" },
   { time: "19:00", subject: "משמר", teacher: "הרב אבן לוין", category: "rabanim", contactKey: "", days: ["שני"], duration: 60, lang: "אנגלית", note: "לימוד בחבורות קטנות" },
