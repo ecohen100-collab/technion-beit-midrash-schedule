@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>לוח שיעורים - בית המדרש בטכניון</title>
+<style>
+  :root {
+    --bg: #f4f8f9;
+    --card-bg: #ffffff;
+    --text: #1a2b2b;
+    --muted: #5a6b6b;
+    --border: #dde5e5;
+    --rabanim: #1f7a7a;
+    --groups: #2e86c1;
+    --women: #d81b8c;
+    --chevruta: #8a8a8a;
+    --accent: #16585e;
+    --header-accent: #b8894a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1.4;
+    padding-bottom: 40px;
+  }
+  header {
+    background: var(--header-accent);
+    color: #fff;
+    padding: 5px 16px 3px;
+    text-align: center;
+  }
+  header h1 { margin: 0; font-size: 1.05rem; }
+  header p { margin: 0; font-size: 0.75rem; opacity: 0.9; }
+
+  .sticky-controls {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .view-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px 3px;
+  }
+  .view-toggle-label {
+    flex: 0 0 auto;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .view-btn {
+    flex: 1 1 0;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    font-weight: 700;
+    cursor: pointer;
+    min-height: 34px;
+  }
+  .view-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+  .days-nav {
+    display: flex;
+    overflow-x: auto;
+    gap: 6px;
+    padding: 5px 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .days-nav.hidden { display: none; }
+  .day-btn {
+    flex: 0 0 auto;
+    padding: 5px 12px;
+    font-size: 0.85rem;
+    border-radius: 999px;
+    border: 2px solid var(--accent);
+    background: #fff;
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 28px;
+  }
+  .day-btn.active { background: var(--accent); color: #fff; }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 3px 8px;
+  }
+  .filters:last-child { padding-bottom: 6px; }
+  .filter-btn {
+    flex: 1 1 auto;
+    padding: 5px 8px;
+    font-size: 0.78rem;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 30px;
+    color: var(--text);
+  }
+  .filter-btn[data-cat="all"].active { background: var(--text); color: #fff; border-color: var(--text); }
+  .filter-btn[data-cat="rabanim"].active { background: var(--rabanim); color: #fff; border-color: var(--rabanim); }
+  .filter-btn[data-cat="groups"].active { background: var(--groups); color: #fff; border-color: var(--groups); }
+  .filter-btn[data-cat="women"].active { background: var(--women); color: #fff; border-color: var(--women); }
+  .filter-btn[data-cat="chevruta"].active { background: var(--chevruta); color: #fff; border-color: var(--chevruta); }
+
+  .filter-btn.generic.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+  .notice-banner {
+    background: #fff6e0;
+    color: #7a5b00;
+    border-bottom: 1px solid #f0ddaa;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  main { padding: 8px 12px 0; max-width: 700px; margin: 0 auto; }
+
+  /* ---------- List view ---------- */
+  .day-heading {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin: 22px 4px 10px;
+    padding: 6px 4px;
+    border-bottom: 2px solid var(--accent);
+    position: sticky;
+    top: var(--controls-h, 100px);
+    background: var(--bg);
+    z-index: 5;
+  }
+  .day-heading:first-child { margin-top: 4px; }
+
+  .entry {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-inline-start: 8px solid var(--groups);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .entry.rabanim { border-inline-start-color: var(--rabanim); }
+  .entry.groups { border-inline-start-color: var(--groups); }
+  .entry.women { border-inline-start-color: var(--women); }
+  .entry.chevruta { border-inline-start-color: var(--chevruta); }
+
+  .entry-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .entry-time { font-size: 1.3rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+  .entry-subject { font-size: 1.15rem; font-weight: 700; }
+  .entry-teacher { margin-top: 2px; color: var(--muted); font-size: 1rem; }
+  .entry-note { margin-top: 2px; color: var(--muted); font-size: 0.75rem; font-style: italic; }
+  .entry-meta {
+    margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border);
+    font-size: 0.95rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 16px;
+  }
+  .entry-meta a { color: var(--accent); font-weight: 700; text-decoration: none; }
+
+  .entry-groups {
+    margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border);
+    font-size: 0.95rem;
+  }
+  .entry-groups > div { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; }
+  .eg-label { font-weight: 600; }
+  .eg-loc { color: var(--muted); white-space: nowrap; }
+
+  /* ---------- Grid (timetable) view ---------- */
+  .grid-wrap {
+    position: relative;
+    margin: 10px auto 0;
+    border-inline-start: 2px solid var(--border);
+  }
+  .grid-hour-line {
+    position: absolute;
+    right: 0; left: 0;
+    border-top: 1px solid var(--border);
+  }
+  .grid-hour-label {
+    position: absolute;
+    right: 4px;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 0 4px;
+  }
+  .grid-cards-area {
+    position: absolute;
+    top: 0; bottom: 0;
+    right: 46px;
+    left: 6px;
+  }
+  .grid-card {
+    position: absolute;
+    box-sizing: border-box;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-inline-start: 6px solid var(--groups);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    cursor: pointer;
+  }
+  .grid-card.rabanim { border-inline-start-color: var(--rabanim); }
+  .grid-card.groups { border-inline-start-color: var(--groups); }
+  .grid-card.women { border-inline-start-color: var(--women); }
+  .grid-card.chevruta { border-inline-start-color: var(--chevruta); }
+  .grid-card .t { font-weight: 700; color: var(--accent); font-size: 0.75rem; }
+  .grid-card .s { font-weight: 700; }
+  .grid-card .r { color: var(--muted); font-size: 0.75rem; }
+
+  /* ---------- Week grid ---------- */
+  .week-wrap { margin: 10px auto 0; max-width: 700px; }
+  .week-header-row {
+    display: flex;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 2;
+    border-bottom: 1px solid var(--border);
+    margin-right: 30px;
+  }
+  .week-day-header {
+    flex: 1 1 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--muted);
+    padding: 6px 0;
+  }
+  .week-day-header.today { color: #fff; background: var(--accent); border-radius: 8px 8px 0 0; }
+  .week-body { position: relative; }
+  .week-hour-line { position: absolute; right: 28px; left: 0; border-top: 1px solid var(--border); }
+  .week-hour-label {
+    position: absolute; right: 0; width: 26px; text-align: center;
+    font-size: 0.6rem; color: var(--muted); transform: translateY(-50%);
+    background: var(--bg); z-index: 1;
+  }
+  .week-columns { position: relative; display: flex; margin-right: 30px; height: 100%; }
+  .week-col { flex: 1 1 0; position: relative; border-inline-start: 1px solid var(--border); min-width: 0; }
+  .week-event {
+    position: absolute;
+    box-sizing: border-box;
+    outline: 1px solid var(--bg);
+    border-radius: 4px; overflow: hidden; padding: 2px 3px;
+    font-size: 0.58rem; line-height: 1.15; cursor: pointer; color: #fff;
+  }
+  .week-event.rabanim { background: var(--rabanim); }
+  .week-event.groups { background: var(--groups); }
+  .week-event.women { background: var(--women); }
+  .week-event.chevruta { background: var(--chevruta); }
+  .we-t { font-weight: 700; font-size: 0.52rem; opacity: 0.9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .we-s { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ---------- Details modal ---------- */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 100; align-items: flex-end; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-card {
+    background: var(--bg); width: 100%; max-width: 500px;
+    border-radius: 16px 16px 0 0; padding: 20px 16px 24px;
+    max-height: 85vh; overflow-y: auto; position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 10px; left: 10px; width: 36px; height: 36px;
+    border-radius: 50%; border: none; background: var(--border); color: var(--text);
+    font-size: 1.1rem; cursor: pointer;
+  }
+  .modal-day { font-weight: 800; color: var(--accent); margin-bottom: 8px; padding-inline-end: 40px; }
+
+  .empty-msg { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 1.05rem; }
+
+  footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 20px 12px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>לוח שיעורים לציבור</h1>
+  <p>בית המדרש בטכניון</p>
+</header>
+
+<div class="sticky-controls">
+  <div class="view-toggle" id="viewToggle">
+    <span class="view-toggle-label">תצוגה:</span>
+    <button class="view-btn active" data-view="list">רשימה</button>
+    <button class="view-btn" data-view="grid" data-mode="week">לוז שבועי</button>
+    <button class="view-btn" data-view="grid" data-mode="day">לוז יומי</button>
+  </div>
+  <nav class="days-nav hidden" id="daysNav"></nav>
+  <div class="filters" id="filtersNav">
+    <button class="filter-btn active" data-cat="all">הכל</button>
+    <button class="filter-btn" data-cat="rabanim">שיעורי הרב</button>
+    <button class="filter-btn" data-cat="groups">קבוצות לימוד</button>
+    <button class="filter-btn" data-cat="women">לנשים</button>
+    <button class="filter-btn" data-cat="chevruta">חברותא</button>
+  </div>
+  <div class="filters" id="langNav">
+    <button class="filter-btn generic active" data-lang="all">הכל (שפה)</button>
+    <button class="filter-btn generic" data-lang="עברית">עברית</button>
+    <button class="filter-btn generic" data-lang="צרפתית">צרפתית</button>
+    <button class="filter-btn generic" data-lang="אנגלית">אנגלית</button>
+  </div>
+  <div class="notice-banner">תקופת מבחנים / בין הסמסטרים: ייתכן וחלק מהשיעורים לא מתקיימים. כדאי לבדוק עם אנשי הקשר.</div>
+</div>
+
+<main id="content"></main>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<footer>
+  לחיצה על מספר טלפון תחייג ישירות<br>
+  <a id="feedbackLink" href="#" style="color:var(--accent); font-weight:700; display:inline-block; margin-top:10px;">📝 שלח הערה לשיפור</a>
+</footer>
+
+<script src="data.js"></script>
+<script>
+  const HEBREW_DAY_INDEX = new Date().getDay(); // 0=ראשון
+  let selectedDay = DAYS[HEBREW_DAY_INDEX];
+  let selectedView = "list";
+  let gridMode = "week";
+
+  const selectedCats = new Set();
+  const selectedLangs = new Set();
+
+  const DAY_LETTER = { "ראשון":"א", "שני":"ב", "שלישי":"ג", "רביעי":"ד", "חמישי":"ה", "שישי":"ו", "שבת":"ש" };
+
+  const viewToggle = document.getElementById("viewToggle");
+  const daysNav = document.getElementById("daysNav");
+  const filtersNav = document.getElementById("filtersNav");
+  const langNav = document.getElementById("langNav");
+  const content = document.getElementById("content");
+  const modalOverlay = document.getElementById("modalOverlay");
+  const modalContent = document.getElementById("modalContent");
+  const modalClose = document.getElementById("modalClose");
+
+  const feedbackLink = document.getElementById("feedbackLink");
+  const feedbackMsg = encodeURIComponent("הערה לשיפור בלוח השיעורים - בית המדרש בטכניון:\n\n");
+  feedbackLink.href = `https://wa.me/972585858432?text=${feedbackMsg}`;
+
+  DAYS.forEach(day => {
+    const btn = document.createElement("button");
+    btn.className = "day-btn" + (day === selectedDay ? " active" : "");
+    btn.textContent = "יום " + day;
+    btn.dataset.day = day;
+    btn.addEventListener("click", () => { selectedDay = day; render(); });
+    daysNav.appendChild(btn);
+  });
+
+  viewToggle.querySelectorAll(".view-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      selectedView = btn.dataset.view;
+      if (btn.dataset.mode) gridMode = btn.dataset.mode;
+      render();
+    });
+  });
+
+  function wireMultiSelect(nav, set, datasetKey) {
+    nav.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const val = btn.dataset[datasetKey];
+        if (val === "all") { set.clear(); }
+        else { set.has(val) ? set.delete(val) : set.add(val); }
+        render();
+      });
+    });
+  }
+  wireMultiSelect(filtersNav, selectedCats, "cat");
+  wireMultiSelect(langNav, selectedLangs, "lang");
+
+  function openModal(e, day) {
+    modalContent.innerHTML = `<div class="modal-day">יום ${day}</div>` + entryCardHTML(e, day);
+    modalOverlay.classList.add("open");
+  }
+  function closeModal() { modalOverlay.classList.remove("open"); }
+  modalClose.addEventListener("click", closeModal);
+  modalOverlay.addEventListener("click", (ev) => { if (ev.target === modalOverlay) closeModal(); });
+
+  content.addEventListener("click", (ev) => {
+    const el = ev.target.closest(".week-event, .grid-card");
+    if (!el) return;
+    const idx = Number(el.dataset.idx);
+    const day = el.dataset.day;
+    openModal(SCHEDULE[idx], day);
+  });
+
+  function toMinutes(t) {
+    const [h, m] = t.split(":").map(Number);
+    return h * 60 + m;
+  }
+
+  function matchesCat(e) {
+    if (e.hidden) return false;
+    const catOk = selectedCats.size === 0 || selectedCats.has(e.category);
+    const langOk = selectedLangs.size === 0 || selectedLangs.has(e.lang || "עברית");
+    return catOk && langOk;
+  }
+
+  function toWhatsAppNumber(phone) {
+    const digits = phone.replace(/\D/g, "");
+    return digits.startsWith("0") ? "972" + digits.slice(1) : digits;
+  }
+
+  const BYDAY = { "ראשון":"SU", "שני":"MO", "שלישי":"TU", "רביעי":"WE", "חמישי":"TH", "שישי":"FR", "שבת":"SA" };
+  const DEFAULT_DURATION_MIN = 60; // משך משוער - לא תמיד מצוין
+
+  function pad(n) { return String(n).padStart(2, "0"); }
+
+  function getDurationMin(e, day) {
+    return (e.durationByDay && e.durationByDay[day]) || e.duration || DEFAULT_DURATION_MIN;
+  }
+
+  function formatTimeRange(e, day) {
+    if (e.timeLabel) return e.timeLabel;
+    const startMin = toMinutes(e.time);
+    const endMin = startMin + getDurationMin(e, day);
+    const eh = Math.floor(endMin / 60) % 24;
+    const em = endMin % 60;
+    return `<span dir="ltr">${e.time}–${eh}:${pad(em)}</span>`;
+  }
+
+  function fmtLocal(d) {
+    return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  }
+
+  function nextDateForDay(day, timeStr) {
+    const [h, m] = timeStr.split(":").map(Number);
+    const now = new Date();
+    const targetDow = DAYS.indexOf(day); // DAYS order matches JS getDay() 0=ראשון..6=שבת
+    const diffDays = (targetDow - now.getDay() + 7) % 7;
+    const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffDays, h, m, 0);
+    if (diffDays === 0 && candidate.getTime() < now.getTime()) {
+      candidate.setDate(candidate.getDate() + 7);
+    }
+    return candidate;
+  }
+
+  function googleCalendarLink(e, day) {
+    const start = nextDateForDay(day, e.time);
+    const durationMin = getDurationMin(e, day);
+    const end = new Date(start.getTime() + durationMin * 60000);
+    const contact = CONTACTS[e.contactKey] || null;
+    const detailsLines = [e.teacher || "", "בית המדרש בטכניון"].filter(Boolean);
+    const params = new URLSearchParams({
+      action: "TEMPLATE",
+      text: e.subject,
+      dates: `${fmtLocal(start)}/${fmtLocal(end)}`,
+      details: detailsLines.join("\n"),
+      location: (contact && contact.location) || "",
+      ctz: "Asia/Jerusalem",
+      recur: `RRULE:FREQ=WEEKLY;BYDAY=${BYDAY[day]}`
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  }
+
+  function entryCardHTML(e, day) {
+    const contact = CONTACTS[e.contactKey] || null;
+    return `
+      <div class="entry ${e.category}">
+        <div class="entry-top">
+          <div>
+            <div class="entry-subject">${e.subject}</div>
+            ${e.teacher ? `<div class="entry-teacher">${e.teacher}</div>` : ""}
+            ${e.note ? `<div class="entry-note">${e.note}</div>` : ""}
+          </div>
+          <div class="entry-time">${formatTimeRange(e, day)}</div>
+        </div>
+        ${e.groups ? `<div class="entry-groups">${e.groups.map(g => `<div><span class="eg-label">${g.label}</span><span class="eg-loc">📍 ${g.location}</span></div>`).join("")}</div>` : ""}
+        <div class="entry-meta">
+          ${contact && contact.location ? `<span>📍 ${contact.location}</span>` : ""}
+          ${contact && contact.contact ? `<span>👤 ${contact.contact}</span>` : ""}
+          ${contact && contact.phone ? `
+            <span>📞 <a href="tel:${contact.phone.replace(/-/g, "")}">${contact.phone}</a></span>
+            <span>💬 <a href="https://wa.me/${toWhatsAppNumber(contact.phone)}" target="_blank" rel="noopener">וואטסאפ</a></span>
+          ` : ""}
+          ${contact && contact.groupLink ? `<span>💬 <a href="${contact.groupLink}" target="_blank" rel="noopener">הצטרפות לקבוצת וואטסאפ</a></span>` : ""}
+          <span>📅 <a href="${googleCalendarLink(e, day)}" target="_blank" rel="noopener">הוספה ליומן Google</a></span>
+        </div>
+      </div>`;
+  }
+
+  function renderList() {
+    let html = "";
+    let any = false;
+    DAYS.forEach(day => {
+      const items = SCHEDULE
+        .filter(e => e.days.includes(day))
+        .filter(matchesCat)
+        .sort((a, b) => toMinutes(a.time) - toMinutes(b.time));
+      if (items.length === 0) return;
+      any = true;
+      html += `<div class="day-heading">יום ${day}</div>`;
+      html += items.map(it => entryCardHTML(it, day)).join("");
+    });
+    content.innerHTML = any ? html : '<div class="empty-msg">אין שיעורים בקטגוריה זו</div>';
+  }
+
+  // שעות שקטות (אף פעם אין שיעור) - נדחסות הרבה יותר בציר הזמן
+  const QUIET_START = 12 * 60;
+  const QUIET_END = 18 * 60;
+
+  function makeTimeMapper(dayStart, scale, quietScale) {
+    return function y(mins) {
+      if (mins <= QUIET_START) return (mins - dayStart) * scale;
+      const preQuiet = (QUIET_START - dayStart) * scale;
+      if (mins >= QUIET_END) {
+        const quietSpan = (QUIET_END - QUIET_START) * quietScale;
+        return preQuiet + quietSpan + (mins - QUIET_END) * scale;
+      }
+      return preQuiet + (mins - QUIET_START) * quietScale;
+    };
+  }
+
+  // מארגן אירועים חופפים בעמודות זו-לצד-זו, כמו בגוגל קלנדר
+  function computeLayout(items, day, y, minHeight) {
+    const withTimes = items.map(e => {
+      const startMin = toMinutes(e.time);
+      const durationMin = getDurationMin(e, day);
+      return { e, startMin, endMin: startMin + durationMin };
+    }).sort((a, b) => a.startMin - b.startMin || a.endMin - b.endMin);
+
+    const clusters = [];
+    let current = [];
+    let currentEnd = -Infinity;
+    withTimes.forEach(it => {
+      if (current.length && it.startMin >= currentEnd) {
+        clusters.push(current);
+        current = [];
+        currentEnd = -Infinity;
+      }
+      current.push(it);
+      currentEnd = Math.max(currentEnd, it.endMin);
+    });
+    if (current.length) clusters.push(current);
+
+    clusters.forEach(cluster => {
+      const columnEnds = [];
+      cluster.forEach(it => {
+        let placedCol = columnEnds.findIndex(end => end <= it.startMin);
+        if (placedCol === -1) { placedCol = columnEnds.length; columnEnds.push(it.endMin); }
+        else { columnEnds[placedCol] = it.endMin; }
+        it.col = placedCol;
+      });
+      cluster.forEach(it => { it.cols = columnEnds.length; });
+    });
+
+    return withTimes.map(it => ({
+      e: it.e,
+      top: Math.max(0, y(it.startMin)),
+      height: Math.max(minHeight, y(it.endMin) - y(it.startMin) - 2),
+      col: it.col,
+      cols: it.cols
+    }));
+  }
+
+  function renderGrid() {
+    const DAY_START = 6 * 60;   // 06:00
+    const DAY_END = 22 * 60;    // 22:00
+    const SCALE = 1.6;
+    const QUIET_SCALE = SCALE * 0.25;
+    const y = makeTimeMapper(DAY_START, SCALE, QUIET_SCALE);
+    const totalHeight = y(DAY_END);
+
+    const items = SCHEDULE
+      .filter(e => e.days.includes(selectedDay))
+      .filter(matchesCat);
+
+    let html = `<div class="grid-wrap" style="height:${totalHeight}px">`;
+    for (let h = 6; h <= 22; h++) {
+      const top = y(h * 60);
+      html += `<div class="grid-hour-line" style="top:${top}px"></div>`;
+      html += `<div class="grid-hour-label" style="top:${top}px">${h}:00</div>`;
+    }
+
+    const layout = computeLayout(items, selectedDay, y, 40);
+    let cards = "";
+    layout.forEach(({ e, top, height, col, cols }) => {
+      const contact = CONTACTS[e.contactKey];
+      const loc = contact && contact.location ? ` · 📍${contact.location}` : "";
+      const idx = SCHEDULE.indexOf(e);
+      const widthPct = 100 / cols;
+      const rightPct = col * widthPct;
+      cards += `<div class="grid-card ${e.category}" style="top:${top}px;height:${height}px;right:${rightPct}%;width:${widthPct}%" data-idx="${idx}" data-day="${selectedDay}">
+        <div class="t">${formatTimeRange(e, selectedDay)}${loc}</div>
+        <div class="s">${e.subject}</div>
+        ${e.teacher ? `<div class="r">${e.teacher}</div>` : ""}
+      </div>`;
+    });
+    html += `<div class="grid-cards-area">${cards}</div></div>`;
+    content.innerHTML = items.length ? html : '<div class="empty-msg">אין שיעורים בקטגוריה זו ביום ' + selectedDay + '</div>';
+  }
+
+  function renderWeekGrid() {
+    const DAY_START = 6 * 60;   // 06:00
+    const DAY_END = 22 * 60;    // 22:00
+    const SCALE = 1.04;
+    const QUIET_SCALE = SCALE * 0.25;
+    const y = makeTimeMapper(DAY_START, SCALE, QUIET_SCALE);
+    const totalHeight = y(DAY_END);
+    const today = DAYS[new Date().getDay()];
+
+    let hourLines = "";
+    for (let h = 6; h <= 22; h++) {
+      const top = y(h * 60);
+      hourLines += `<div class="week-hour-line" style="top:${top}px"></div>`;
+      hourLines += `<div class="week-hour-label" style="top:${top}px">${h}</div>`;
+    }
+
+    const header = DAYS.map(d => `<div class="week-day-header${d === today ? " today" : ""}">${DAY_LETTER[d]}</div>`).join("");
+
+    let anyEvents = false;
+    const cols = DAYS.map(day => {
+      const items = SCHEDULE.filter(e => e.days.includes(day)).filter(matchesCat);
+      const layout = computeLayout(items, day, y, 16);
+      const events = layout.map(({ e, top, height, col, cols }) => {
+        anyEvents = true;
+        const idx = SCHEDULE.indexOf(e);
+        const widthPct = 100 / cols;
+        const rightPct = col * widthPct;
+        return `<div class="week-event ${e.category}" style="top:${top}px;height:${height}px;right:${rightPct}%;width:${widthPct}%" data-idx="${idx}" data-day="${day}">
+          <div class="we-t">${formatTimeRange(e, day)}</div><div class="we-s">${e.subject}</div>
+        </div>`;
+      }).join("");
+      return `<div class="week-col">${events}</div>`;
+    }).join("");
+
+    content.innerHTML = `
+      <div class="week-wrap">
+        <div class="week-header-row">${header}</div>
+        <div class="week-body" style="height:${totalHeight}px">
+          ${hourLines}
+          <div class="week-columns">${cols}</div>
+        </div>
+      </div>`;
+    if (!anyEvents) content.innerHTML += '<div class="empty-msg">אין שיעורים בקטגוריה זו</div>';
+  }
+
+  function render() {
+    viewToggle.querySelectorAll(".view-btn").forEach(b => {
+      const isActive = b.dataset.view === selectedView && (!b.dataset.mode || b.dataset.mode === gridMode);
+      b.classList.toggle("active", isActive);
+    });
+    function updateMultiSelectUI(nav, set, datasetKey) {
+      nav.querySelectorAll(".filter-btn").forEach(b => {
+        const val = b.dataset[datasetKey];
+        b.classList.toggle("active", set.size === 0 || val === "all" || set.has(val));
+      });
+    }
+    updateMultiSelectUI(filtersNav, selectedCats, "cat");
+    updateMultiSelectUI(langNav, selectedLangs, "lang");
+
+    daysNav.querySelectorAll(".day-btn").forEach(b => {
+      const isActive = b.dataset.day === selectedDay;
+      b.classList.toggle("active", isActive);
+      if (isActive) b.scrollIntoView({ block: "nearest", inline: "center" });
+    });
+    daysNav.classList.toggle("hidden", !(selectedView === "grid" && gridMode === "day"));
+
+    document.documentElement.style.setProperty("--controls-h", document.querySelector(".sticky-controls").offsetHeight + "px");
+
+    if (selectedView === "list") renderList();
+    else if (gridMode === "week") renderWeekGrid();
+    else renderGrid();
+  }
+
+  render();
+</script>
+
+</body>
+</html>
