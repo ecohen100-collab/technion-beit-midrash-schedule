@@ -16,7 +16,8 @@ const CONTACTS = {
   "וחי בהם": { contact: "גיל טולדנו", phone: "055-2260801" },
   "מדרשה לבנות": { contact: "רינת", phone: "052-6161326" },
   "אמונה ומעשה": { contact: "איתן", phone: "058-5858432" },
-  "Lunch and Learn": { contact: "טובה לוין", phone: "052-2298735" }
+  "Lunch and Learn": { contact: "טובה לוין", phone: "052-2298735" },
+  "לימוד כוזרי": { contact: "איתן כהן", phone: "058-5858432" }
 };
 
 const SCHEDULE = [
@@ -24,7 +25,7 @@ const SCHEDULE = [
   { time: "18:40", subject: "שיעור (נושא חדש - אלול)", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40, timeLabel: "שעה לפני מנחה" },
   { time: "19:35", subject: "שיעור", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 30, timeLabel: "בין מנחה לערבית" },
 
-  { time: "8:00", subject: "לימוד כוזרי", teacher: "איתי", category: "groups", contactKey: "", days: ["רביעי"], duration: 60 },
+  { time: "8:00", subject: "לימוד כוזרי", teacher: "איתן כהן", category: "groups", contactKey: "לימוד כוזרי", days: ["רביעי"], duration: 60 },
 
   { time: "20:30", subject: "שיעור אמונה", teacher: "דורון אביטל", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, note: "השעה משתנה" },
   { time: "20:30", subject: "אמונה ומעשה", teacher: "", category: "groups", contactKey: "אמונה ומעשה", days: ["שני"], duration: 90 },
