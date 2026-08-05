@@ -17,7 +17,8 @@ const CONTACTS = {
   "מדרשה לבנות": { contact: "רינת", phone: "052-6161326" },
   "אמונה ומעשה": { contact: "איתן", phone: "058-5858432" },
   "Lunch and Learn": { contact: "טובה לוין", phone: "052-2298735" },
-  "לימוד כוזרי": { contact: "איתן כהן", phone: "058-5858432" }
+  "לימוד כוזרי": { contact: "איתן כהן", phone: "058-5858432" },
+  "חסידות": { contact: "חנניה גבאי", phone: "+33 7 66 81 35 23" }
 };
 
 const SCHEDULE = [
@@ -29,9 +30,10 @@ const SCHEDULE = [
 
   { time: "20:30", subject: "שיעור אמונה", teacher: "דורון אביטל", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, note: "השעה משתנה" },
   { time: "20:30", subject: "אמונה ומעשה", teacher: "", category: "groups", contactKey: "אמונה ומעשה", days: ["שני"], duration: 90 },
-  { time: "20:00", subject: "מדרשה לבנות - שיעור עם אפרת", teacher: "אפרת", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 60 },
-  { time: "21:00", subject: "מדרשה לבנות - שיעור עם מו\"ר", teacher: "מו\"ר הרב אלעד דוקוב", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 60 },
-  { time: "20:00", subject: "חברותא בצרפתית", teacher: "", category: "chevruta", contactKey: "", days: ["שני"], duration: 120, lang: "צרפתית" },
+  { time: "19:00", subject: "מדרשה לבנות", teacher: "אפרת ומו\"ר הרב אלעד דוקוב", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 120 },
+  { time: "19:00", subject: "שיעור בצרפתית", teacher: "ר' מיכאל וועקנין", category: "groups", contactKey: "", days: ["שני"], duration: 60, lang: "צרפתית" },
+
+  { time: "20:30", subject: "חסידות", teacher: "", category: "groups", contactKey: "חסידות", days: ["רביעי"], duration: 90, lang: "צרפתית" },
 
   { time: "19:30", subject: "תוכנית סמיכת חבר", teacher: "הרב אבן לוין", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, lang: "אנגלית", note: "לימוד עמוק בענייני הלכה. השעה תלויה בזמני תפילה" },
   { time: "19:00", subject: "משמר", teacher: "הרב אבן לוין", category: "groups", contactKey: "", days: ["שני"], duration: 60, lang: "אנגלית", note: "לימוד בחבורות קטנות" },
