@@ -292,6 +292,17 @@
   .empty-msg { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 1.05rem; }
 
   footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 20px 12px 0; }
+  .time-rel { display: block; font-size: 0.7rem; font-weight: 600; color: var(--muted); text-align: left; }
+  .we-t .time-rel { display: none; }
+  .prayers { max-width: 900px; margin: 10px auto 0; padding: 0 16px; }
+  .prayers details { background: var(--card-bg); border: 2px solid var(--accent); border-radius: 12px; padding: 8px 12px; }
+  .prayers summary { cursor: pointer; font-weight: 800; color: var(--accent); }
+  .prayers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px 14px; margin-top: 8px; }
+  .prayers-grid div { display: flex; justify-content: space-between; border-bottom: 1px dashed #d5e0e0; padding: 2px 0; }
+  .prayers-grid b { direction: ltr; white-space: nowrap; }
+  .prayers-note { margin-top: 6px; font-size: 0.85rem; color: #8a5a00; }
+  .prayers-links { margin-top: 6px; font-size: 0.8rem; }
+  .prayers-links a { color: var(--accent); }
 </style>
 </head>
 <body>
@@ -300,6 +311,15 @@
   <h1>לוח שיעורים לציבור</h1>
   <p>בית המדרש בטכניון</p>
 </header>
+
+<section class="prayers" id="prayersBox" hidden>
+  <details open>
+    <summary id="prayersTitle">זמני התפילות השבוע</summary>
+    <div class="prayers-grid" id="prayersGrid"></div>
+    <div class="prayers-note" id="prayersNote"></div>
+    <div class="prayers-links"><a href="tefilot.html" target="_blank">טבלה לכל השנה (להדפסה)</a></div>
+  </details>
+</section>
 
 <div class="sticky-controls">
   <div class="view-toggle" id="viewToggle">
@@ -340,7 +360,45 @@
 </footer>
 
 <script src="data.js"></script>
+<script src="prayers.js" onerror="window.PRAYER_WEEKS = {}"></script>
 <script>
+  // זמני התפילות של השבוע (prayers.js, נוצר ע"י תפילות/build.py): תיבה בראש הדף + שיעורים שמוגדרים ביחס לתפילה.
+  (function applyPrayerTimes() {
+    const weeks = typeof PRAYER_WEEKS !== "undefined" ? PRAYER_WEEKS : {};
+    const now = new Date();
+    const sat = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (6 - now.getDay()));
+    const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const w = weeks[iso(sat)];
+    if (!w) return;
+    const mins = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+    const fmt = x => `${Math.floor(x / 60)}:${String(x % 60).padStart(2, "0")}`;
+
+    const F = typeof PRAYER_FIXED !== "undefined" ? PRAYER_FIXED : {};
+    const rows = [["שחרית (חול)", F.s], ["מנחה (חול)", w.m], ["ערבית (חול)", w.a], ["מנחה ערב שבת", w.f],
+                  ["שחרית שבת", `${F.se} / ${F.sl}`], ["מנחה שבת", w.k], ["ערבית מוצ\"ש", w.n]];
+    document.getElementById("prayersGrid").innerHTML =
+      rows.filter(r => r[1]).map(r => `<div><span>${r[0]}</span><b>${r[1]}</b></div>`).join("");
+    const sun = new Date(sat); sun.setDate(sat.getDate() - 6);
+    document.getElementById("prayersTitle").textContent =
+      `זמני התפילות השבוע (${sun.getDate()}.${sun.getMonth() + 1}–${sat.getDate()}.${sat.getMonth() + 1})`;
+    document.getElementById("prayersNote").innerHTML = (w.notes || []).join("<br>");
+    document.getElementById("prayersBox").hidden = false;
+
+    // שיעורים יחסיים: rel = דקות ביחס למנחה (שלילי = לפני). "בין מנחה לערבית" = מנחה+15 עד ערבית.
+    SCHEDULE.forEach(e => {
+      if (!e.timeLabel) return;
+      const isShabbat = e.days.length === 1 && e.days[0] === "שבת";
+      let r = null;
+      if (e.timeLabel === "בין מנחה לערבית")
+        r = isShabbat ? (w.n ? [mins(w.k) + 25, mins(w.n)] : null) : [mins(w.m) + 15, mins(w.a)];
+      else if (typeof e.rel === "number" && !isShabbat && !e.days.includes("שישי"))
+        r = [mins(w.m) + e.rel, mins(w.m)];
+      if (!r || r[1] - r[0] < 10) return;
+      e.time = fmt(r[0]); e.autoTime = true;
+      e.duration = Math.min(e.duration || 60, r[1] - r[0]);
+      e.durationByDay = undefined;
+    });
+  })();
   const HEBREW_DAY_INDEX = new Date().getDay(); // 0=ראשון
   let selectedDay = DAYS[HEBREW_DAY_INDEX];
   let selectedView = "list";
@@ -437,12 +495,13 @@
   }
 
   function formatTimeRange(e, day) {
-    if (e.timeLabel) return e.timeLabel;
+    if (e.timeLabel && !e.autoTime) return e.timeLabel;
     const startMin = toMinutes(e.time);
     const endMin = startMin + getDurationMin(e, day);
     const eh = Math.floor(endMin / 60) % 24;
     const em = endMin % 60;
-    return `<span dir="ltr">${e.time}–${eh}:${pad(em)}</span>`;
+    const range = `<span dir="ltr">${e.time}–${eh}:${pad(em)}</span>`;
+    return e.autoTime ? `${range}<small class="time-rel">${e.timeLabel}</small>` : range;
   }
 
   function fmtLocal(d) {
