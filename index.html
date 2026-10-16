@@ -300,6 +300,10 @@
   .prayers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px 14px; margin-top: 8px; }
   .prayers-grid div { display: flex; justify-content: space-between; border-bottom: 1px dashed #d5e0e0; padding: 2px 0; }
   .prayers-grid b { direction: ltr; white-space: nowrap; }
+  .prayers-today { margin-top: 8px; padding: 6px 10px; background: #eef6f6; border-radius: 8px; font-size: 0.95rem; line-height: 1.7; }
+  .prayers-today span { white-space: nowrap; }
+  .prayers-today b { direction: ltr; unicode-bidi: isolate; }
+  .prayers-today .next { background: var(--accent); color: #fff; border-radius: 6px; padding: 0 6px; }
   .prayers-note { margin-top: 6px; font-size: 0.85rem; color: #8a5a00; }
   .prayers-links { margin-top: 6px; font-size: 0.8rem; }
   .prayers-links a { color: var(--accent); }
@@ -315,6 +319,7 @@
 <section class="prayers" id="prayersBox" hidden>
   <details open>
     <summary id="prayersTitle">זמני התפילות השבוע</summary>
+    <div class="prayers-today" id="prayersToday" hidden></div>
     <div class="prayers-grid" id="prayersGrid"></div>
     <div class="prayers-note" id="prayersNote"></div>
     <div class="prayers-links"><a href="tefilot.html" target="_blank">טבלה לכל השנה (להדפסה)</a></div>
@@ -366,22 +371,49 @@
   (function applyPrayerTimes() {
     const weeks = typeof PRAYER_WEEKS !== "undefined" ? PRAYER_WEEKS : {};
     const now = new Date();
-    const sat = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (6 - now.getDay()));
+    let sat = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (6 - now.getDay()));
     const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-    const w = weeks[iso(sat)];
+    let w = weeks[iso(sat)];
     if (!w) return;
     const mins = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
     const fmt = x => `${Math.floor(x / 60)}:${String(x % 60).padStart(2, "0")}`;
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+
+    // במוצאי שבת, חצי שעה אחרי ערבית, עוברים לשבוע הבא
+    let shifted = false;
+    if (now.getDay() === 6 && w.n && nowMin >= mins(w.n) + 30) {
+      const next = new Date(sat); next.setDate(sat.getDate() + 7);
+      if (weeks[iso(next)]) { sat = next; w = weeks[iso(next)]; shifted = true; }
+    }
 
     const F = typeof PRAYER_FIXED !== "undefined" ? PRAYER_FIXED : {};
-    const rows = [["שחרית (חול)", F.s], ["מנחה (חול)", w.m], ["ערבית (חול)", w.a], ["מנחה ערב שבת", w.f],
+    const rows = [["שחרית (חול)", F.s], ["מנחה (חול)", w.m], ["ערבית (חול)", w.a], ["הדלקת נרות", w.h], ["מנחה ערב שבת", w.f],
                   ["שחרית שבת", `${F.se} / ${F.sl}`], ["מנחה שבת", w.k], ["ערבית מוצ\"ש", w.n]];
     document.getElementById("prayersGrid").innerHTML =
       rows.filter(r => r[1]).map(r => `<div><span>${r[0]}</span><b>${r[1]}</b></div>`).join("");
     const sun = new Date(sat); sun.setDate(sat.getDate() - 6);
     document.getElementById("prayersTitle").textContent =
-      `זמני התפילות השבוע (${sun.getDate()}.${sun.getMonth() + 1}–${sat.getDate()}.${sat.getMonth() + 1})`;
+      `זמני התפילות השבוע (${sun.getDate()}.${sun.getMonth() + 1}–${sat.getDate()}.${sat.getMonth() + 1})` + (w.p ? ` · פרשת ${w.p}` : "");
     document.getElementById("prayersNote").innerHTML = (w.notes || []).join("<br>");
+
+    // שורת "היום" (או "מחר" במוצאי שבת): התפילות של היום, והקרובה מודגשת
+    const day = shifted ? new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1) : now;
+    const dow = day.getDay(), dd = `(${String(day.getDate()).padStart(2, "0")}.${String(day.getMonth() + 1).padStart(2, "0")})`;
+    const fast = (w.fasts || {})[iso(day)];
+    const yomTov = (w.notes || []).some(n => n.includes(dd) && n.includes("יום טוב"));
+    let todayHtml;
+    if (yomTov) todayHtml = "יום טוב: הזמנים לפי הודעת הרב";
+    else {
+      const list = dow === 6 ? [["שחרית", `${F.se} / ${F.sl}`], ["מנחה", w.k], ["ערבית", w.n]]
+                 : dow === 5 ? [["שחרית", F.s], ["הדלקת נרות", w.h], ["מנחה", w.f]]
+                 : [["שחרית", F.s], ["מנחה", fast ? fast[0] : w.m], ["ערבית", fast ? fast[1] : w.a]];
+      const items = list.filter(x => x[1]);
+      const nextIdx = shifted ? -1 : items.findIndex(x => mins(x[1].split(" ")[0]) > nowMin);
+      todayHtml = items.map((x, i) => `<span${i === nextIdx ? ' class="next"' : ""}>${x[0]} <b>${x[1]}</b></span>`).join(" · ") + (fast ? " · צום" : "");
+    }
+    const todayEl = document.getElementById("prayersToday");
+    todayEl.innerHTML = `<strong>${shifted ? "מחר" : "היום"}, יום ${DAYS[dow]}:</strong> ${todayHtml}`;
+    todayEl.hidden = false;
     document.getElementById("prayersBox").hidden = false;
 
     // שיעורים יחסיים: rel = דקות ביחס למנחה (שלילי = לפני). "בין מנחה לערבית" = מנחה+15 עד ערבית.
