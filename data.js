@@ -1,5 +1,6 @@
 // נתוני לוח השיעורים - בית המדרש בטכניון
 // מקור: הודעה שאיתן שלח לרב דוקוב (טרם אושרה על ידו). לוודא מולו לפני פרסום.
+// תוכניות "חי בהם" (ראשון, שני, רביעי): לפי מצגת ערב הפתיחה תשפ"ז.
 
 const CATEGORIES = {
   rabanim: { label: "שיעורי הרב", color: "#1f7a7a" },
@@ -28,8 +29,9 @@ const SCHEDULE = [
 
   { time: "8:00", subject: "לימוד כוזרי", teacher: "איתן כהן", category: "groups", contactKey: "לימוד כוזרי", days: ["רביעי"], duration: 60 },
 
-  { time: "20:30", subject: "שיעור אמונה", teacher: "דורון אביטל", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, note: "השעה משתנה" },
-  { time: "20:30", subject: "אמונה ומעשה", teacher: "", category: "groups", contactKey: "אמונה ומעשה", days: ["שני"], duration: 90 },
+  { time: "18:30", subject: "אגדות חז\"ל - שיעור אמונה ומחשבה", teacher: "הרב דורון אביטל", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, note: "בנושאים מגוונים עפ\"י מדרשי חז\"ל" },
+  { time: "19:00", subject: "אמונה ומעשה", teacher: "הרב ד\"ר איתן כהן או הרב נדב טולדו", category: "groups", contactKey: "אמונה ומעשה", days: ["שני"], duration: 60, note: "20:00 ארוחת ערב. פעם בחודש: מרצה אורח, ערב משותף עם המדרשה" },
+  { time: "20:20", subject: "אמונה ומעשה - אורות הקודש (הרב קוק)", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "אמונה ומעשה", days: ["שני"], duration: 30 },
   { time: "19:00", subject: "מדרשה לבנות", teacher: "אפרת ומו\"ר הרב אלעד דוקוב", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 120 },
   { time: "19:00", subject: "שיעור בצרפתית", teacher: "ר' מיכאל וועקנין", category: "groups", contactKey: "", days: ["שני"], duration: 60, lang: "צרפתית" },
 
@@ -41,7 +43,8 @@ const SCHEDULE = [
   { time: "18:00", subject: "חברותא", teacher: "", category: "chevruta", contactKey: "", days: ["שלישי"], duration: 240 },
 
   { time: "13:00", subject: "Lunch and Learn", teacher: "טובה לוין", category: "groups", contactKey: "Lunch and Learn", days: ["רביעי"], duration: 60, lang: "אנגלית" },
-  { time: "20:30", subject: "וחי בהם - הלכה בעיון", teacher: "הרב עדיאל כהן", category: "groups", contactKey: "וחי בהם", days: ["רביעי"], duration: 60 },
+  { time: "20:00", subject: "חי בהם - הלכה במרחבי החיים", teacher: "הרב עדיאל כהן", category: "groups", contactKey: "וחי בהם", days: ["רביעי"], duration: 60, note: "נושאים הלכתיים הקשורים בחיי היומיום של כולנו" },
+  { time: "19:30", subject: "תוכנית הכנה למבחן רבנות - חופה וקידושין", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["רביעי"], duration: 90 },
 
   { time: "8:30", subject: "שיעור בגמרא", teacher: "הרב אבן לוין", category: "groups", contactKey: "", days: ["חמישי"], duration: 60, lang: "אנגלית", note: "השעה משוערת" },
 
