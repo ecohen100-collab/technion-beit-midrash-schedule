@@ -15,6 +15,7 @@
     --groups: #2e86c1;
     --women: #d81b8c;
     --chevruta: #8a8a8a;
+    --tefila: #6b5b95;
     --accent: #16585e;
     --header-accent: #b8894a;
   }
@@ -117,6 +118,7 @@
   .filter-btn[data-cat="groups"].active { background: var(--groups); color: #fff; border-color: var(--groups); }
   .filter-btn[data-cat="women"].active { background: var(--women); color: #fff; border-color: var(--women); }
   .filter-btn[data-cat="chevruta"].active { background: var(--chevruta); color: #fff; border-color: var(--chevruta); }
+  .filter-btn[data-cat="tefila"].active { background: var(--tefila); color: #fff; border-color: var(--tefila); }
 
   .filter-btn.generic.active { background: var(--text); color: #fff; border-color: var(--text); }
 
@@ -161,6 +163,7 @@
   .entry.groups { border-inline-start-color: var(--groups); }
   .entry.women { border-inline-start-color: var(--women); }
   .entry.chevruta { border-inline-start-color: var(--chevruta); }
+  .entry.tefila { border-inline-start-color: var(--tefila); }
 
   .entry-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
   .entry-time { font-size: 1.3rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
@@ -224,6 +227,7 @@
   .grid-card.groups { border-inline-start-color: var(--groups); }
   .grid-card.women { border-inline-start-color: var(--women); }
   .grid-card.chevruta { border-inline-start-color: var(--chevruta); }
+  .grid-card.tefila { border-inline-start-color: var(--tefila); }
   .grid-card .t { font-weight: 700; color: var(--accent); font-size: 0.75rem; }
   .grid-card .s { font-weight: 700; }
   .grid-card .r { color: var(--muted); font-size: 0.75rem; }
@@ -268,6 +272,7 @@
   .week-event.groups { background: var(--groups); }
   .week-event.women { background: var(--women); }
   .week-event.chevruta { background: var(--chevruta); }
+  .week-event.tefila { background: var(--tefila); }
   .we-t { font-weight: 700; font-size: 0.52rem; opacity: 0.9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .we-s { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -340,6 +345,7 @@
     <button class="filter-btn" data-cat="groups">קבוצות לימוד</button>
     <button class="filter-btn" data-cat="women">לנשים</button>
     <button class="filter-btn" data-cat="chevruta">פרוייקט חברותא</button>
+    <button class="filter-btn" data-cat="tefila">מניינים נוספים</button>
   </div>
   <div class="filters" id="langNav">
     <button class="filter-btn generic active" data-lang="all">הכל (שפה)</button>
