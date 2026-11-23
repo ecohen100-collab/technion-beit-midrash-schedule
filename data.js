@@ -40,6 +40,7 @@ const SCHEDULE = [
   { time: "19:30", subject: "תוכנית סמיכת חבר", teacher: "הרב אבן לוין", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, lang: "אנגלית", note: "לימוד עמוק בענייני הלכה. השעה תלויה בזמני תפילה" },
   { time: "19:00", subject: "משמר", teacher: "הרב אבן לוין", category: "groups", contactKey: "", days: ["שני"], duration: 60, lang: "אנגלית", note: "לימוד בחבורות קטנות" },
 
+  { time: "18:30", subject: "שיעור הלכה לנשים", teacher: "הרב אבן לוין", category: "women", contactKey: "", days: ["שלישי"], lang: "אנגלית", note: "בדירה של אחת הבנות (לא בבית המדרש)" },
   { time: "18:00", subject: "פרוייקט חברותא", teacher: "", category: "chevruta", contactKey: "", days: ["שלישי"], duration: 240 },
 
   { time: "13:00", subject: "Lunch and Learn", teacher: "טובה לוין", category: "groups", contactKey: "Lunch and Learn", days: ["רביעי"], duration: 60, lang: "אנגלית" },
