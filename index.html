@@ -71,6 +71,11 @@
     min-height: 34px;
   }
   .view-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+  .prayer-toggle { flex: 0 0 auto; padding: 6px 8px; font-size: 0.8rem; border-radius: 8px; border: 2px solid var(--tefila);
+    background: #fff; color: var(--tefila); font-weight: 700; cursor: pointer; min-height: 34px; }
+  .prayer-toggle.on { background: var(--tefila); color: #fff; }
+  .zoom-hint { font-size: 0.7rem; color: var(--muted); text-align: center; padding: 2px 0 4px; }
+  .week-wrap, .grid-wrap { touch-action: pan-x pan-y; }
 
   .days-nav {
     display: flex;
@@ -337,6 +342,7 @@
     <button class="view-btn active" data-view="list">רשימה</button>
     <button class="view-btn" data-view="grid" data-mode="week">לוז שבועי</button>
     <button class="view-btn" data-view="grid" data-mode="day">לוז יומי</button>
+    <button class="prayer-toggle on" id="prayerToggle" title="הצגה / הסתרה של זמני התפילות">תפילות ✓</button>
   </div>
   <nav class="days-nav hidden" id="daysNav"></nav>
   <div class="filters" id="filtersNav">
@@ -345,7 +351,7 @@
     <button class="filter-btn" data-cat="groups">קבוצות לימוד</button>
     <button class="filter-btn" data-cat="women">לנשים</button>
     <button class="filter-btn" data-cat="chevruta">פרוייקט חברותא</button>
-    <button class="filter-btn" data-cat="tefila">מניינים נוספים</button>
+    <button class="filter-btn" data-cat="tefila">תפילות</button>
   </div>
   <div class="filters" id="langNav">
     <button class="filter-btn generic active" data-lang="all">הכל (שפה)</button>
@@ -420,6 +426,17 @@
     todayEl.innerHTML = `<strong>${shifted ? "מחר" : "היום"}, יום ${DAYS[dow]}:</strong> ${todayHtml}`;
     todayEl.hidden = false;
     document.getElementById("prayersBox").hidden = false;
+
+    // כל התפילות של השבוע כאירועים בלוח (קטגוריה "תפילות"), לפי זמני השבוע
+    const P = (time, subject, days, duration) => time && SCHEDULE.push({ time, subject, teacher: "", category: "tefila", contactKey: "", days, duration, prayer: true });
+    const HOL = ["ראשון","שני","שלישי","רביעי","חמישי"];
+    P(w.m, "מנחה", HOL, 20);
+    P(w.a, "ערבית", HOL, 20);
+    P(w.f, "מנחה וקבלת שבת", ["שישי"], 45);
+    P(F.se, "שחרית (מניין מוקדם)", ["שבת"], 150);
+    P(F.sl, "שחרית (מניין מאוחר)", ["שבת"], 150);
+    P(w.k, "מנחה", ["שבת"], 25);
+    P(w.n, "ערבית מוצאי שבת", ["שבת"], 20);
 
     // שיעורים יחסיים: rel = דקות ביחס למנחה (שלילי = לפני). "בין מנחה לערבית" = מנחה+15 עד ערבית.
     SCHEDULE.forEach(e => {
@@ -512,8 +529,46 @@
     return h * 60 + m;
   }
 
+  let showPrayers = true;
+  try { showPrayers = localStorage.getItem("showPrayers") !== "0"; } catch (_) {}
+  const prayerToggle = document.getElementById("prayerToggle");
+  function syncPrayerToggle() { prayerToggle.classList.toggle("on", showPrayers); prayerToggle.textContent = showPrayers ? "תפילות ✓" : "תפילות"; }
+  prayerToggle.addEventListener("click", () => {
+    showPrayers = !showPrayers;
+    try { localStorage.setItem("showPrayers", showPrayers ? "1" : "0"); } catch (_) {}
+    syncPrayerToggle(); render();
+  });
+  syncPrayerToggle();
+
+  // הגדלה של ציר הזמן: צביטה בשתי אצבעות (או Ctrl+גלגלת במחשב)
+  let zoom = 1;
+  try { zoom = Number(localStorage.getItem("gridZoom")) || 1; } catch (_) {}
+  (function wirePinchZoom() {
+    let startDist = 0, startZoom = 1, raf = 0;
+    const dist = t => Math.abs(t[0].clientY - t[1].clientY) + 0.3 * Math.abs(t[0].clientX - t[1].clientX);
+    const apply = z => {
+      zoom = Math.min(4, Math.max(0.6, z));
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; render(); });
+    };
+    const save = () => { try { localStorage.setItem("gridZoom", String(zoom)); } catch (_) {} };
+    content.addEventListener("touchstart", ev => {
+      if (selectedView === "grid" && ev.touches.length === 2) { startDist = dist(ev.touches); startZoom = zoom; }
+    }, { passive: true });
+    content.addEventListener("touchmove", ev => {
+      if (selectedView === "grid" && ev.touches.length === 2 && startDist > 10) {
+        ev.preventDefault();
+        apply(startZoom * dist(ev.touches) / startDist);
+      }
+    }, { passive: false });
+    content.addEventListener("touchend", ev => { if (ev.touches.length < 2 && startDist) { startDist = 0; save(); } });
+    content.addEventListener("wheel", ev => {
+      if (selectedView === "grid" && ev.ctrlKey) { ev.preventDefault(); apply(zoom * (ev.deltaY < 0 ? 1.1 : 0.9)); save(); }
+    }, { passive: false });
+  })();
+
   function matchesCat(e) {
     if (e.hidden) return false;
+    if (!showPrayers && e.category === "tefila") return false;
     const catOk = selectedCats.size === 0 || selectedCats.has(e.category);
     const langOk = selectedLangs.size === 0 || selectedLangs.has(e.lang || "עברית");
     return catOk && langOk;
@@ -680,8 +735,8 @@
   function renderGrid() {
     const DAY_START = 6 * 60;   // 06:00
     const DAY_END = 22 * 60;    // 22:00
-    const SCALE = 1.6;
-    const QUIET_SCALE = SCALE * 0.25;
+    const SCALE = 1.6 * zoom;
+    const QUIET_SCALE = SCALE * 0.6;
     const y = makeTimeMapper(DAY_START, SCALE, QUIET_SCALE);
     const totalHeight = y(DAY_END);
 
@@ -717,8 +772,8 @@
   function renderWeekGrid() {
     const DAY_START = 6 * 60;   // 06:00
     const DAY_END = 22 * 60;    // 22:00
-    const SCALE = 1.04;
-    const QUIET_SCALE = SCALE * 0.25;
+    const SCALE = 1.04 * zoom;
+    const QUIET_SCALE = SCALE * 0.6;
     const y = makeTimeMapper(DAY_START, SCALE, QUIET_SCALE);
     const totalHeight = y(DAY_END);
     const today = DAYS[new Date().getDay()];
@@ -749,6 +804,7 @@
     }).join("");
 
     content.innerHTML = `
+      <div class="zoom-hint">אפשר להגדיל את ציר השעות בצביטה עם שתי אצבעות</div>
       <div class="week-wrap">
         <div class="week-header-row">${header}</div>
         <div class="week-body" style="height:${totalHeight}px">

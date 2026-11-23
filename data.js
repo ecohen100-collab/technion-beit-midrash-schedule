@@ -7,7 +7,7 @@ const CATEGORIES = {
   groups: { label: "קבוצות לימוד", color: "#2e86c1" },
   women: { label: "לנשים", color: "#d81b8c" },
   chevruta: { label: "פרוייקט חברותא", color: "#8a8a8a" },
-  tefila: { label: "מניינים נוספים", color: "#6b5b95" }
+  tefila: { label: "תפילות", color: "#6b5b95" }
 };
 
 const LANGUAGES = ["עברית", "צרפתית", "אנגלית"];
@@ -53,7 +53,7 @@ const SCHEDULE = [
 
   { time: "13:00", subject: "Lunch and Learn", teacher: "טובה לוין", category: "groups", contactKey: "Lunch and Learn", days: ["רביעי"], duration: 60, lang: "אנגלית" },
   { time: "20:00", subject: "חי בהם - הלכה במרחבי החיים", teacher: "הרב עדיאל כהן", category: "groups", contactKey: "וחי בהם", days: ["רביעי"], duration: 60, note: "נושאים הלכתיים הקשורים בחיי היומיום של כולנו" },
-  { time: "19:30", subject: "תוכנית הכנה למבחן רבנות - חופה וקידושין", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["רביעי"], duration: 90 },
+  { time: "18:45", subject: "תוכנית הכנה למבחן רבנות - חופה וקידושין", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["רביעי"], duration: 60 },
 
   { time: "19:00", subject: "ליל שישי - צ'ולנט ולימוד", teacher: "הרב ישראל אריה ברנאד", category: "groups", contactKey: "ליל שישי", days: ["חמישי"], duration: 60 },
   { time: "8:30", subject: "שיעור בגמרא", teacher: "הרב אבן לוין", category: "groups", contactKey: "", days: ["חמישי"], duration: 60, lang: "אנגלית", note: "השעה משוערת" },
