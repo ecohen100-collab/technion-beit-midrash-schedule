@@ -27,6 +27,7 @@ const CONTACTS = {
 
 const SCHEDULE = [
   { time: "6:00", subject: "שחרית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40 },
+  { time: "7:10", subject: "שחרית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי","שישי"], duration: 50 },
   { time: "8:00", subject: "שחרית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40 },
   { time: "14:00", subject: "מנחה", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 15 },
   { time: "18:30", subject: "ערבית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי"], duration: 15 },
