@@ -6,7 +6,7 @@ const CATEGORIES = {
   rabanim: { label: "שיעורי הרב", color: "#1f7a7a" },
   groups: { label: "קבוצות לימוד", color: "#2e86c1" },
   women: { label: "לנשים", color: "#d81b8c" },
-  chevruta: { label: "חברותא", color: "#8a8a8a" }
+  chevruta: { label: "פרוייקט חברותא", color: "#8a8a8a" }
 };
 
 const LANGUAGES = ["עברית", "צרפתית", "אנגלית"];
@@ -30,7 +30,7 @@ const SCHEDULE = [
   { time: "8:00", subject: "לימוד כוזרי", teacher: "איתן כהן", category: "groups", contactKey: "לימוד כוזרי", days: ["רביעי"], duration: 60 },
 
   { time: "18:30", subject: "אגדות חז\"ל - שיעור אמונה ומחשבה", teacher: "הרב דורון אביטל", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, note: "בנושאים מגוונים עפ\"י מדרשי חז\"ל" },
-  { time: "19:00", subject: "אמונה ומעשה", teacher: "הרב ד\"ר איתן כהן או הרב נדב טולדו", category: "groups", contactKey: "אמונה ומעשה", days: ["שני"], duration: 60, note: "20:00 ארוחת ערב. פעם בחודש: מרצה אורח, ערב משותף עם המדרשה" },
+  { time: "19:00", subject: "אמונה ומעשה", teacher: "איתן כהן או הרב נדב טולדו", category: "groups", contactKey: "אמונה ומעשה", days: ["שני"], duration: 60, note: "20:00 ארוחת ערב. פעם בחודש: מרצה אורח, ערב משותף עם המדרשה" },
   { time: "20:20", subject: "אמונה ומעשה - אורות הקודש (הרב קוק)", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "אמונה ומעשה", days: ["שני"], duration: 30 },
   { time: "19:00", subject: "מדרשה לבנות", teacher: "אפרת ומו\"ר הרב אלעד דוקוב", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 120 },
   { time: "19:00", subject: "שיעור בצרפתית", teacher: "ר' מיכאל וועקנין", category: "groups", contactKey: "", days: ["שני"], duration: 60, lang: "צרפתית" },
@@ -40,7 +40,7 @@ const SCHEDULE = [
   { time: "19:30", subject: "תוכנית סמיכת חבר", teacher: "הרב אבן לוין", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, lang: "אנגלית", note: "לימוד עמוק בענייני הלכה. השעה תלויה בזמני תפילה" },
   { time: "19:00", subject: "משמר", teacher: "הרב אבן לוין", category: "groups", contactKey: "", days: ["שני"], duration: 60, lang: "אנגלית", note: "לימוד בחבורות קטנות" },
 
-  { time: "18:00", subject: "חברותא", teacher: "", category: "chevruta", contactKey: "", days: ["שלישי"], duration: 240 },
+  { time: "18:00", subject: "פרוייקט חברותא", teacher: "", category: "chevruta", contactKey: "", days: ["שלישי"], duration: 240 },
 
   { time: "13:00", subject: "Lunch and Learn", teacher: "טובה לוין", category: "groups", contactKey: "Lunch and Learn", days: ["רביעי"], duration: 60, lang: "אנגלית" },
   { time: "20:00", subject: "חי בהם - הלכה במרחבי החיים", teacher: "הרב עדיאל כהן", category: "groups", contactKey: "וחי בהם", days: ["רביעי"], duration: 60, note: "נושאים הלכתיים הקשורים בחיי היומיום של כולנו" },
