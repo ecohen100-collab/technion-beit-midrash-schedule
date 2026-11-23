@@ -16,7 +16,7 @@ const DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", 
 const CONTACTS = {
   "וחי בהם": { contact: "גיל טולדנו", phone: "055-2260801" },
   "מדרשה לבנות": { contact: "רינת", phone: "052-6161326" },
-  "אמונה ומעשה": { contact: "איתן", phone: "058-5858432" },
+  "אמונה ומעשה": { contact: "איתן כהן", phone: "058-5858432" },
   "Lunch and Learn": { contact: "טובה לוין", phone: "052-2298735" },
   "לימוד כוזרי": { contact: "איתן כהן", phone: "058-5858432" },
   "חסידות": { contact: "חנניה גבאי", phone: "+33 7 66 81 35 23" }
@@ -31,7 +31,7 @@ const SCHEDULE = [
 
   { time: "18:30", subject: "אגדות חז\"ל - שיעור אמונה ומחשבה", teacher: "הרב דורון אביטל", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, note: "בנושאים מגוונים עפ\"י מדרשי חז\"ל" },
   { time: "19:00", subject: "אמונה ומעשה", teacher: "איתן כהן או הרב נדב טולדו", category: "groups", contactKey: "אמונה ומעשה", days: ["שני"], duration: 60, note: "20:00 ארוחת ערב. פעם בחודש: מרצה אורח, ערב משותף עם המדרשה" },
-  { time: "20:20", subject: "אמונה ומעשה - אורות הקודש (הרב קוק)", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "אמונה ומעשה", days: ["שני"], duration: 30 },
+  { time: "20:20", subject: "אמונה ומעשה - קודש וחול", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "אמונה ומעשה", days: ["שני"], duration: 30 },
   { time: "19:00", subject: "מדרשה לבנות", teacher: "אפרת ומו\"ר הרב אלעד דוקוב", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 120 },
   { time: "19:00", subject: "שיעור בצרפתית", teacher: "ר' מיכאל וועקנין", category: "groups", contactKey: "", days: ["שני"], duration: 60, lang: "צרפתית" },
 
