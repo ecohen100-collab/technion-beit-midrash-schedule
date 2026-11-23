@@ -428,6 +428,8 @@
       let r = null;
       if (e.timeLabel === "בין מנחה לערבית")
         r = isShabbat ? (w.n ? [mins(w.k) + 25, mins(w.n)] : null) : [mins(w.m) + 15, mins(w.a)];
+      else if (e.timeLabel === "מיד אחרי ערבית" && !isShabbat)
+        r = [mins(w.a), mins(w.a) + (e.duration || 60)];
       else if (typeof e.rel === "number" && !isShabbat && !e.days.includes("שישי"))
         r = [mins(w.m) + e.rel, mins(w.m)];
       if (!r || r[1] - r[0] < 10) return;

@@ -30,13 +30,13 @@ const SCHEDULE = [
   { time: "8:00", subject: "שחרית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40 },
   { time: "14:00", subject: "מנחה", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 15 },
   { time: "18:30", subject: "ערבית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי"], duration: 15 },
-  { time: "18:00", subject: "דף יומי", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40, timeLabel: "שעה לפני מנחה", rel: -80 },
-  { time: "18:40", subject: "שיעור", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40, timeLabel: "שעה לפני מנחה", rel: -40 },
+  { time: "17:05", subject: "דף יומי", teacher: "הרב ישראל אריה ברנאד", category: "groups", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 60, timeLabel: "מיד אחרי ערבית" },
+  { time: "18:40", subject: "שיעור", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40, timeLabel: "שעה לפני מנחה", rel: -40, hidden: true },
   { time: "19:35", subject: "שיעור", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 30, timeLabel: "בין מנחה לערבית" },
 
   { time: "8:00", subject: "לימוד כוזרי", teacher: "איתן כהן", category: "groups", contactKey: "לימוד כוזרי", days: ["רביעי"], duration: 60 },
 
-  { time: "18:30", subject: "אגדות חז\"ל - שיעור אמונה ומחשבה", teacher: "הרב דורון אביטל", category: "groups", contactKey: "אגדות חז\"ל", days: ["ראשון"], duration: 60, note: "בנושאים מגוונים עפ\"י מדרשי חז\"ל" },
+  { time: "18:30", subject: "אגדות חז\"ל - שיעור אמונה ומחשבה", teacher: "הרב דורון אביטל", category: "groups", contactKey: "אגדות חז\"ל", days: ["ראשון"], duration: 60, hidden: true, note: "בנושאים מגוונים עפ\"י מדרשי חז\"ל" },
   { time: "19:00", subject: "אמונה ומעשה", teacher: "איתן כהן או הרב נדב טולדו", category: "groups", contactKey: "אמונה ומעשה", days: ["שני"], duration: 60, note: "20:00 ארוחת ערב. פעם בחודש: מרצה אורח, ערב משותף עם המדרשה" },
   { time: "20:20", subject: "אמונה ומעשה - קודש וחול", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "אמונה ומעשה", days: ["שני"], duration: 30 },
   { time: "19:00", subject: "מדרשה לבנות", teacher: "אפרת ומו\"ר הרב אלעד דוקוב", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 120 },
