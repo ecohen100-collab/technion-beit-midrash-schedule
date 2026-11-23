@@ -29,7 +29,7 @@ const SCHEDULE = [
   { time: "6:00", subject: "שחרית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40 },
   { time: "8:00", subject: "שחרית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40 },
   { time: "14:00", subject: "מנחה", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 15 },
-  { time: "18:30", subject: "ערבית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 15 },
+  { time: "18:30", subject: "ערבית", teacher: "", category: "tefila", contactKey: "", days: ["ראשון","שני","שלישי","רביעי"], duration: 15 },
   { time: "18:00", subject: "דף יומי", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40, timeLabel: "שעה לפני מנחה", rel: -80 },
   { time: "18:40", subject: "שיעור (נושא חדש - אלול)", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 40, timeLabel: "שעה לפני מנחה", rel: -40 },
   { time: "19:35", subject: "שיעור", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["ראשון","שני","שלישי","רביעי","חמישי"], duration: 30, timeLabel: "בין מנחה לערבית" },
