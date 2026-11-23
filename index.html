@@ -426,8 +426,8 @@
     // כל התפילות של השבוע כאירועים בלוח (קטגוריה "תפילות"), לפי זמני השבוע
     const P = (time, subject, days, duration) => time && SCHEDULE.push({ time, subject, teacher: "", category: "tefila", contactKey: "", days, duration, prayer: true });
     const HOL = ["ראשון","שני","שלישי","רביעי","חמישי"];
-    P(w.m, "מנחה", HOL, 20);
-    P(w.a, "ערבית", HOL, 20);
+    P(w.m, "מנחה", HOL, 15);
+    P(w.a, "ערבית", HOL, 15);
     P(w.f, "מנחה וקבלת שבת", ["שישי"], 45);
     P(F.se, "שחרית (מניין מוקדם)", ["שבת"], 150);
     P(F.sl, "שחרית (מניין מאוחר)", ["שבת"], 150);
