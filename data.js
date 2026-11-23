@@ -14,6 +14,7 @@ const LANGUAGES = ["עברית", "צרפתית", "אנגלית"];
 const DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
 const CONTACTS = {
+  "ליל שישי": { contact: "מור דהן", phone: "052-5716990", groupLink: "https://chat.whatsapp.com/GuG31iNAL0eEsACA6NCyVC" },
   "אגדות חז\"ל": { groupLink: "https://chat.whatsapp.com/LX4WVjIK8km7TZQ96imYsC" },
   "וחי בהם": { contact: "גיל טולדנו", phone: "055-2260801", groupLink: "https://chat.whatsapp.com/H2WagQbdAm197aFaSc19Cf" },
   "מדרשה לבנות": { contact: "רינת", phone: "052-6161326", groupLink: "https://chat.whatsapp.com/Af1NEA9GI7773tjSYk0thG" },
@@ -48,6 +49,7 @@ const SCHEDULE = [
   { time: "20:00", subject: "חי בהם - הלכה במרחבי החיים", teacher: "הרב עדיאל כהן", category: "groups", contactKey: "וחי בהם", days: ["רביעי"], duration: 60, note: "נושאים הלכתיים הקשורים בחיי היומיום של כולנו" },
   { time: "19:30", subject: "תוכנית הכנה למבחן רבנות - חופה וקידושין", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["רביעי"], duration: 90 },
 
+  { time: "19:00", subject: "ליל שישי - צ'ולנט ולימוד", teacher: "הרב ישראל אריה ברנאד", category: "groups", contactKey: "ליל שישי", days: ["חמישי"], duration: 60 },
   { time: "8:30", subject: "שיעור בגמרא", teacher: "הרב אבן לוין", category: "groups", contactKey: "", days: ["חמישי"], duration: 60, lang: "אנגלית", note: "השעה משוערת" },
 
   { time: "19:00", subject: "דרשת שבת", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "", days: ["שישי"], duration: 20, timeLabel: "בין קבלת שבת לערבית" },
