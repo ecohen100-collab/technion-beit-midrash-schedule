@@ -14,11 +14,12 @@ const LANGUAGES = ["עברית", "צרפתית", "אנגלית"];
 const DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
 const CONTACTS = {
-  "וחי בהם": { contact: "גיל טולדנו", phone: "055-2260801" },
-  "מדרשה לבנות": { contact: "רינת", phone: "052-6161326" },
-  "אמונה ומעשה": { contact: "איתן כהן", phone: "058-5858432" },
+  "אגדות חז\"ל": { groupLink: "https://chat.whatsapp.com/LX4WVjIK8km7TZQ96imYsC" },
+  "וחי בהם": { contact: "גיל טולדנו", phone: "055-2260801", groupLink: "https://chat.whatsapp.com/H2WagQbdAm197aFaSc19Cf" },
+  "מדרשה לבנות": { contact: "רינת", phone: "052-6161326", groupLink: "https://chat.whatsapp.com/Af1NEA9GI7773tjSYk0thG" },
+  "אמונה ומעשה": { contact: "איתן כהן", phone: "058-5858432", groupLink: "https://chat.whatsapp.com/ILfOUuOtzYjGbN0RmvYJIB" },
   "Lunch and Learn": { contact: "טובה לוין", phone: "052-2298735" },
-  "לימוד כוזרי": { contact: "איתן כהן", phone: "058-5858432" },
+  "לימוד כוזרי": { contact: "איתן כהן", phone: "058-5858432", groupLink: "https://chat.whatsapp.com/KlnvYtRDlE555GbwlyqvW1" },
   "חסידות": { contact: "חנניה גבאי", phone: "+33 7 66 81 35 23" }
 };
 
@@ -29,7 +30,7 @@ const SCHEDULE = [
 
   { time: "8:00", subject: "לימוד כוזרי", teacher: "איתן כהן", category: "groups", contactKey: "לימוד כוזרי", days: ["רביעי"], duration: 60 },
 
-  { time: "18:30", subject: "אגדות חז\"ל - שיעור אמונה ומחשבה", teacher: "הרב דורון אביטל", category: "groups", contactKey: "", days: ["ראשון"], duration: 60, note: "בנושאים מגוונים עפ\"י מדרשי חז\"ל" },
+  { time: "18:30", subject: "אגדות חז\"ל - שיעור אמונה ומחשבה", teacher: "הרב דורון אביטל", category: "groups", contactKey: "אגדות חז\"ל", days: ["ראשון"], duration: 60, note: "בנושאים מגוונים עפ\"י מדרשי חז\"ל" },
   { time: "19:00", subject: "אמונה ומעשה", teacher: "איתן כהן או הרב נדב טולדו", category: "groups", contactKey: "אמונה ומעשה", days: ["שני"], duration: 60, note: "20:00 ארוחת ערב. פעם בחודש: מרצה אורח, ערב משותף עם המדרשה" },
   { time: "20:20", subject: "אמונה ומעשה - קודש וחול", teacher: "מו\"ר הרב אלעד דוקוב", category: "rabanim", contactKey: "אמונה ומעשה", days: ["שני"], duration: 30 },
   { time: "19:00", subject: "מדרשה לבנות", teacher: "אפרת ומו\"ר הרב אלעד דוקוב", category: "women", contactKey: "מדרשה לבנות", days: ["שני"], duration: 120 },
