@@ -346,8 +346,6 @@
     <button class="filter-btn" data-cat="rabanim">שיעורי הרב</button>
     <button class="filter-btn" data-cat="groups">קבוצות לימוד</button>
     <button class="filter-btn" data-cat="women">לנשים</button>
-    <button class="filter-btn" data-cat="chevruta">פרוייקט חברותא</button>
-    <button class="filter-btn" data-cat="tefila">תפילות</button>
   </div>
   <div class="filters" id="langNav">
     <button class="filter-btn generic active" data-lang="all">הכל (שפה)</button>
@@ -575,6 +573,23 @@
     content.addEventListener("wheel", ev => {
       if (selectedView === "grid" && ev.ctrlKey) { ev.preventDefault(); zoom = clamp(zoom * (ev.deltaY < 0 ? 1.1 : 0.9)); save(); render(); }
     }, { passive: false });
+  })();
+
+  // לוז יומי: גרירה הצידה מעבירה יום (ימינה = היום הבא, כמו בדפדוף בעברית)
+  (function wireDaySwipe() {
+    let x0 = null, y0 = 0;
+    content.addEventListener("touchstart", ev => {
+      x0 = (ev.touches.length === 1 && selectedView === "grid" && gridMode === "day") ? ev.touches[0].clientX : null;
+      if (x0 !== null) y0 = ev.touches[0].clientY;
+    }, { passive: true });
+    content.addEventListener("touchend", ev => {
+      if (x0 === null || ev.touches.length) return;
+      const t = ev.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0; x0 = null;
+      if (Math.abs(dx) < 60 || Math.abs(dx) < 1.5 * Math.abs(dy)) return;
+      const i = DAYS.indexOf(selectedDay);
+      selectedDay = DAYS[(i + (dx > 0 ? 1 : -1) + 7) % 7];
+      render();
+    }, { passive: true });
   })();
 
   function matchesCat(e) {
