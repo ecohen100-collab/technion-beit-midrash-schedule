@@ -76,7 +76,7 @@
   .prayer-toggle.on { background: var(--tefila); color: #fff; }
   .week-title { font-weight: 700; text-align: center; padding: 6px 8px; }
   .zoom-hint { font-size: 0.7rem; color: var(--muted); text-align: center; padding: 2px 0 4px; }
-  .week-wrap, .grid-wrap { touch-action: pan-x pan-y; }
+  #content, .week-wrap, .grid-wrap { touch-action: pan-x pan-y; }
 
   .days-nav {
     display: flex;
@@ -540,25 +540,40 @@
   let zoom = 1;
   try { zoom = Number(localStorage.getItem("gridZoom")) || 1; } catch (_) {}
   (function wirePinchZoom() {
-    let startDist = 0, startZoom = 1, raf = 0;
+    // בזמן הצביטה: רק מותחים את הלוח ב-CSS (בלי לבנות מחדש, כדי שהמגע לא "יאבד" את האלמנט). בסוף: בונים פעם אחת.
+    let startDist = 0, startZoom = 1, pending = 1, target = null, midY = 0, bodyTop = 0;
     const dist = t => Math.abs(t[0].clientY - t[1].clientY) + 0.3 * Math.abs(t[0].clientX - t[1].clientX);
-    const apply = z => {
-      zoom = Math.min(4, Math.max(0.6, z));
-      if (!raf) raf = requestAnimationFrame(() => { raf = 0; render(); });
-    };
+    const clamp = z => Math.min(4, Math.max(0.6, z));
     const save = () => { try { localStorage.setItem("gridZoom", String(zoom)); } catch (_) {} };
+    const commit = z => {
+      const f = clamp(z) / zoom;
+      zoom = clamp(z); save(); render();
+      if (target) window.scrollBy(0, (midY - bodyTop) * (f - 1));
+    };
     content.addEventListener("touchstart", ev => {
-      if (selectedView === "grid" && ev.touches.length === 2) { startDist = dist(ev.touches); startZoom = zoom; }
+      if (selectedView !== "grid" || ev.touches.length !== 2) return;
+      target = content.querySelector(".week-body, .grid-wrap");
+      if (!target) return;
+      startDist = dist(ev.touches); startZoom = zoom; pending = zoom;
+      midY = (ev.touches[0].clientY + ev.touches[1].clientY) / 2;
+      bodyTop = target.getBoundingClientRect().top;
+      target.style.transformOrigin = `50% ${midY - bodyTop}px`;
     }, { passive: true });
-    content.addEventListener("touchmove", ev => {
-      if (selectedView === "grid" && ev.touches.length === 2 && startDist > 10) {
-        ev.preventDefault();
-        apply(startZoom * dist(ev.touches) / startDist);
-      }
+    document.addEventListener("touchmove", ev => {
+      if (!startDist || ev.touches.length !== 2) return;
+      ev.preventDefault();
+      pending = clamp(startZoom * dist(ev.touches) / startDist);
+      target.style.transform = `scaleY(${pending / startZoom})`;
     }, { passive: false });
-    content.addEventListener("touchend", ev => { if (ev.touches.length < 2 && startDist) { startDist = 0; save(); } });
+    document.addEventListener("touchend", ev => {
+      if (!startDist || ev.touches.length >= 2) return;
+      startDist = 0;
+      if (target) target.style.transform = "";
+      commit(pending); target = null;
+    });
+    document.addEventListener("gesturestart", ev => { if (selectedView === "grid") ev.preventDefault(); }, { passive: false });
     content.addEventListener("wheel", ev => {
-      if (selectedView === "grid" && ev.ctrlKey) { ev.preventDefault(); apply(zoom * (ev.deltaY < 0 ? 1.1 : 0.9)); save(); }
+      if (selectedView === "grid" && ev.ctrlKey) { ev.preventDefault(); zoom = clamp(zoom * (ev.deltaY < 0 ? 1.1 : 0.9)); save(); render(); }
     }, { passive: false });
   })();
 
