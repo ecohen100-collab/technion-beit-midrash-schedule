@@ -17,7 +17,7 @@ const DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", 
 const CONTACTS = {
   "ליל שישי": { contact: "מור דהן", phone: "052-5716990", groupLink: "https://chat.whatsapp.com/GuG31iNAL0eEsACA6NCyVC" },
   "אגדות חז\"ל": { groupLink: "https://chat.whatsapp.com/LX4WVjIK8km7TZQ96imYsC" },
-  "וחי בהם": { contact: "גיל טולדנו", phone: "055-2260801", groupLink: "https://chat.whatsapp.com/H2WagQbdAm197aFaSc19Cf" },
+  "וחי בהם": { contact: "ליאל מרחבי", phone: "050-2248401", groupLink: "https://chat.whatsapp.com/H2WagQbdAm197aFaSc19Cf" },
   "מדרשה לבנות": { contact: "אפרת כהן", phone: "050-8152835", groupLink: "https://chat.whatsapp.com/Af1NEA9GI7773tjSYk0thG" },
   "אמונה ומעשה": { contact: "איתן כהן", phone: "058-5858432", groupLink: "https://chat.whatsapp.com/ILfOUuOtzYjGbN0RmvYJIB" },
   "Lunch and Learn": { contact: "טובה לוין", phone: "052-2298735" },
